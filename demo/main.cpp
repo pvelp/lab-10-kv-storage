@@ -7,7 +7,7 @@
 #include "RDB_Reader.hpp"
 
 
-void print_db()
+//void print_db()
 
 
 std::string create_random_str() {
