@@ -2,6 +2,7 @@
 // Created by pvelp on 01.05.22.
 //
 #include "rocksdb.hpp"
+#include "header.hpp"
 #include <thread>
 #include <utility>
 
@@ -205,4 +206,57 @@ rocksdb::ColumnFamilyHandle* RDB_Manager::findHandle(const std::string &columnNa
     }
   }
   return nullptr;
+}
+
+void RDB_Manager::readColumn(const std::string &column,
+                             std::queue<std::pair<std::string,
+                                                  std::map<std::string,
+                                                           std::string>>> &q){
+  Node node;
+  node.column = column;
+  rocksdb::Iterator* it = createIterator(column);
+  for (it->SeekToFirst(); it->Valid(); it->Next()) {
+    node.key = it->key().ToString();
+    node.value = it->value().ToString();
+    std::map<std::string, std::string> kv{{node.key, node.value}};
+    std::pair<std::string, std::map<std::string, std::string>> p{column, kv};
+    q.push(p);
+    removeNode(column, node.key);
+  }
+  delete it;
+}
+
+
+void RDB_Manager::print_db() {
+  std::queue<std::pair<std::string, std::map<std::string, std::string>>>q;
+  std::vector<std::string> res = getColumnFamilyNames();
+  for (auto& r : res) {
+    readColumn(r, q);
+  }
+  while (!q.empty()){
+    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
+    q.pop();
+    for(auto& item : val.second){
+      std::cout << val.first + " : [" << item.first + " : " << item.second + "]" << std::endl;
+    }
+  }
+}
+
+
+void generate_db(){
+  std::string column_names[] = { "ex1", "some2", "col3" };
+  std::string dbname = "../basedb";
+
+  RDB_Manager rdbManager(dbname, false, true);
+
+  for (size_t j = 0; j < 10; ++j) {
+    rdbManager.addNode(create_random_str(), create_random_str());
+  }
+
+  for (const auto& column_name : column_names) {
+    for (size_t j = 0; j < 10; ++j) {
+      rdbManager.addNode(column_name, create_random_str(), create_random_str());
+    }
+  }
+  rdbManager.~RDB_Manager();
 }

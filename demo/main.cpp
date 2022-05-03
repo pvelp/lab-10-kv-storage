@@ -5,40 +5,14 @@
 #include <random>
 #include "rocksdb.hpp"
 #include "RDB_Reader.hpp"
+#include "ThreadPool.hpp"
+#include "../third-party/PicoSHA2/picosha2.h"
 
 
-//void print_db()
-
-
-std::string create_random_str() {
-  static const auto magic = static_cast<size_t>(time(nullptr));
-  static std::mt19937 randomGenerator(magic);
-
-  std::string res;
-  for (size_t i = 0; i < 10; ++i)
-    res += static_cast<char>(randomGenerator() % 26 + 97);
-
-  return res;
+std::string hash(const std::string& value) {
+  return picosha2::hash256_hex_string(value);
 }
 
-
-void generate_db(){
-  std::string column_names[] = { "ex1", "some2", "col3" };
-  std::string dbname = "../basedb";
-
-  RDB_Manager rdbManager(dbname, false, true);
-
-  for (size_t j = 0; j < 10; ++j) {
-    rdbManager.addNode(create_random_str(), create_random_str());
-  }
-
-  for (const auto& column_name : column_names) {
-    for (size_t j = 0; j < 10; ++j) {
-      rdbManager.addNode(column_name, create_random_str(), create_random_str());
-    }
-  }
-  rdbManager.~RDB_Manager();
-}
 
 
 namespace po = boost::program_options;
@@ -93,33 +67,32 @@ int main(int argc, char* argv[]) {
   }
 
   std::queue<std::pair<std::string, std::map<std::string, std::string>>>q;
+  ThreadPool pool(thread_count);
+//  std::mutex read_mutex;
 
-  RDB_Reader rdbReader("../basedb");
-  std::vector<std::string> res = rdbReader.columnNames();
+  RDB_Manager rdbReader("../basedb", false, false);
+  rdbReader.print_db();
+  std::cout << "--------------------../basedb--------------------" << std::endl;
+  std::vector<std::string> res = rdbReader.getColumnFamilyNames();
   for (auto& r : res) {
-    rdbReader.readColumn(r, q);
+//    pool.enqueue([&rdbReader, &r, &q] {rdbReader.readColumn(r, q);});
+//    rdbReader.readColumn(r, q);
   }
-//  }
-//  while (!q.empty()){
-//    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
-//    q.pop();
-//    for(auto& item : val.second){
-//      std::cout << val.first + " : [" << item.first + " : " << item.second + "]" << std::endl;
-//    }
-//  }
 
-//  RDB_Manager rdbManager(output, false, true);
-//  while (!q.empty()){
-//    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
-//    q.pop();
-//    for(auto& item : val.second){
-////      std::cout << val.first + " : [" << item.first + " : " << item.second + "]" << std::endl;
-//     rdbManager.addNode(val.first, item.first, item.second);
-//    }
-//  }
+  RDB_Manager rdbManager(output, false, true);
+  while (!q.empty()){
+    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
+    q.pop();
+    for(auto& item : val.second){
+     rdbManager.addNode(val.first, item.first, hash(item.second));
+    }
+  }
+  rdbManager.print_db();
+  std::cout << "--------------------../outdb--------------------" << std::endl;
 
+//  rdbReader.~RDB_Manager();
+//  rdbManager.~RDB_Manager();
 
 //  generate_db();
-//  std::cout << log_level << " " << thread_count << " " << output << std::endl;
   return 0;
 }

@@ -41,11 +41,11 @@ find_package(Boost CONFIG REQUIRED COMPONENTS program_options log log_setup thre
 
 add_library(${PROJECT_NAME} STATIC
         # enum your files and delete this comment
-        ${CMAKE_CURRENT_SOURCE_DIR}/sources/example.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/func.cpp)
 
 add_executable(demo
         ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
-        sources/logging.cpp include/logging.hpp  sources/rocksdb.cpp include/rocksdb.hpp  include/Node.hpp include/RDB_Reader.hpp sources/RDB_Reader.cpp)
+        sources/logging.cpp include/logging.hpp  sources/rocksdb.cpp include/rocksdb.hpp  include/Node.hpp include/RDB_Reader.hpp sources/RDB_Reader.cpp include/ThreadPool.hpp)
 #demo/logging.cpp demo/rocksdb.cpp
 target_include_directories(${PROJECT_NAME} PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

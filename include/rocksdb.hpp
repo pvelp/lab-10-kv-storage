@@ -6,6 +6,8 @@
 #include <iostream>
 #include <rocksdb/db.h>
 #include "Node.hpp"
+#include <queue>
+#include <mutex>
 
 class RDB_Manager{
  public:
@@ -34,6 +36,13 @@ class RDB_Manager{
 
   rocksdb::Iterator* createIterator(const std::string& column);
 
+  void readColumn(const std::string &column,
+                  std::queue<std::pair<std::string,
+                                       std::map<std::string,
+                                                std::string>>> &q);
+
+  void print_db();
+
  private:
   rocksdb::ColumnFamilyHandle* findHandle(const std::string& columnName);
 
@@ -47,6 +56,8 @@ class RDB_Manager{
   bool _readOnly;
 
 };
+
+void generate_db();
 
 
 #endif  // LAB_10_ROCKSDB_HPP
