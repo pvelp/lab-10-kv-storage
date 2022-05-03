@@ -2,6 +2,44 @@
 #include <iostream>
 #include <thread>
 #include <string>
+#include <random>
+#include "rocksdb.hpp"
+#include "RDB_Reader.hpp"
+
+
+void print_db()
+
+
+std::string create_random_str() {
+  static const auto magic = static_cast<size_t>(time(nullptr));
+  static std::mt19937 randomGenerator(magic);
+
+  std::string res;
+  for (size_t i = 0; i < 10; ++i)
+    res += static_cast<char>(randomGenerator() % 26 + 97);
+
+  return res;
+}
+
+
+void generate_db(){
+  std::string column_names[] = { "ex1", "some2", "col3" };
+  std::string dbname = "../basedb";
+
+  RDB_Manager rdbManager(dbname, false, true);
+
+  for (size_t j = 0; j < 10; ++j) {
+    rdbManager.addNode(create_random_str(), create_random_str());
+  }
+
+  for (const auto& column_name : column_names) {
+    for (size_t j = 0; j < 10; ++j) {
+      rdbManager.addNode(column_name, create_random_str(), create_random_str());
+    }
+  }
+  rdbManager.~RDB_Manager();
+}
+
 
 namespace po = boost::program_options;
 
@@ -48,13 +86,40 @@ int main(int argc, char* argv[]) {
   std::string output;
   if (vm.count("output")){
     if (!vm.at("output").as<std::string>().empty()){
-      output = vm.at("output").as<std::string>();
+      output = "../"+vm.at("output").as<std::string>();
     }
   } else {
-    output = "/to/input/dbcs-storage.db";
+    output = "../outdb";
   }
 
+  std::queue<std::pair<std::string, std::map<std::string, std::string>>>q;
 
-  std::cout << log_level << " " << thread_count << " " << output << std::endl;
+  RDB_Reader rdbReader("../basedb");
+  std::vector<std::string> res = rdbReader.columnNames();
+  for (auto& r : res) {
+    rdbReader.readColumn(r, q);
+  }
+//  }
+//  while (!q.empty()){
+//    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
+//    q.pop();
+//    for(auto& item : val.second){
+//      std::cout << val.first + " : [" << item.first + " : " << item.second + "]" << std::endl;
+//    }
+//  }
+
+//  RDB_Manager rdbManager(output, false, true);
+//  while (!q.empty()){
+//    std::pair<std::string, std::map<std::string, std::string>> val = q.front();
+//    q.pop();
+//    for(auto& item : val.second){
+////      std::cout << val.first + " : [" << item.first + " : " << item.second + "]" << std::endl;
+//     rdbManager.addNode(val.first, item.first, item.second);
+//    }
+//  }
+
+
+//  generate_db();
+//  std::cout << log_level << " " << thread_count << " " << output << std::endl;
   return 0;
 }
