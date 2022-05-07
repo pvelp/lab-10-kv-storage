@@ -1,7 +1,7 @@
 // Created by pvelp on 03.05.22.
 
-#ifndef LAB_10_THREADPOOL_HPP
-#define LAB_10_THREADPOOL_HPP
+#ifndef INCLUDE_THREADPOOL_HPP_
+#define INCLUDE_THREADPOOL_HPP_
 
 #include <vector>
 #include <queue>
@@ -96,4 +96,4 @@ inline ThreadPool::~ThreadPool()
 }
 
 
-#endif  // LAB_10_THREADPOOL_HPP
+#endif  // INCLUDE_THREADPOOL_HPP_

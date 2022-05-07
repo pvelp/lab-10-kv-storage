@@ -1,12 +1,12 @@
 // Copyright 2022 pvelp
 
-#ifndef STORAGE_READER_HPP
-#define STORAGE_READER_HPP
+#ifndef INCLUDE_READER_HPP_
+#define INCLUDE_READER_HPP_
 #include <rocksdb/db.h>
 
 #include "Field.hpp"
 #include "ThreadPool.hpp"
-
+#include <vector>
 class Reader{
  public:
   explicit Reader(const int& num_workers);
@@ -24,4 +24,4 @@ class Reader{
   std::vector<int> nums_in_columns;
   int temp_nums_in_column = 0;
 };
-#endif  // STORAGE_READER_HPP
+#endif  // INCLUDE_READER_HPP_

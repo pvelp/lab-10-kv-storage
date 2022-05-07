@@ -1,10 +1,10 @@
 // Copyright 2022 pvelp
 
-#ifndef STORAGE_WRITER_HPP
-#define STORAGE_WRITER_HPP
+#ifndef INCLUDE_WRITER_HPP_
+#define INCLUDE_WRITER_HPP_
 #include "ThreadPool.hpp"
 #include "../third-party/PicoSHA2/picosha2.h"
-
+#include <string>
 class Writer{
  public:
   explicit Writer(const int& num_workers);
@@ -14,4 +14,4 @@ class Writer{
  private:
   ThreadPool writers;
 };
-#endif  // STORAGE_WRITER_HPP
+#endif  // INCLUDE_WRITER_HPP_

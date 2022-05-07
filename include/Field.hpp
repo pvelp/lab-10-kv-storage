@@ -1,7 +1,7 @@
 // Copyright 2022 pvelp
 
-#ifndef STORAGE_FIELD_HPP
-#define STORAGE_FIELD_HPP
+#ifndef INCLUDE_FIELD_HPP_
+#define INCLUDE_FIELD_HPP_
 #include <string>
 #include <utility>
 using string = std::string;
@@ -11,4 +11,4 @@ struct Field{
   string value;
   string key;
 };
-#endif  // STORAGE_FIELD_HPP
+#endif  // INCLUDE_FIELD_HPP_
