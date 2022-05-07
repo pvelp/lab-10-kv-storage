@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,9 +16,11 @@ set(
 include("cmake/HunterGate.cmake")
 
 HunterGate(
-  URL "https://github.com/cpp-pm/hunter/archive/v0.23.278.tar.gz"
-  SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
-  FILEPATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.cmake
+#  URL "https://github.com/cpp-pm/hunter/archive/v0.23.278.tar.gz"
+#  SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
+#  FILEPATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.cmake
+        URL "https://github.com/cpp-pm/hunter/archive/v0.23.314.tar.gz"
+        SHA1 "95c47c92f68edb091b5d6d18924baabe02a6962a"
 )
 
 # TODO: rename project and delete this comment
@@ -27,8 +29,8 @@ string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
-hunter_add_package(gflags)
-find_package(gflags CONFIG REQUIRED)
+#hunter_add_package(gflags)
+#find_package(gflags CONFIG REQUIRED)
 
 hunter_add_package(rocksdb)
 find_package(RocksDB CONFIG REQUIRED)
