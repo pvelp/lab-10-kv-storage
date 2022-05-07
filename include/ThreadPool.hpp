@@ -1,4 +1,4 @@
-// Created by pvelp on 03.05.22.
+// Copyright 2022 pvelp
 
 #ifndef INCLUDE_THREADPOOL_HPP_
 #define INCLUDE_THREADPOOL_HPP_
