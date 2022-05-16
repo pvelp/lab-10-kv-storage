@@ -1,6 +1,3 @@
-//
-// Created by aleksandr on 27.04.2021.
-//
 #include <Creator.hpp>
 int main(int argc, const char *argv[]){
   Creator creator;

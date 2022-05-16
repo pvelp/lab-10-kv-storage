@@ -1,5 +1,3 @@
-// Copyright 2020 MIX-1 danilonil1@yandex.ru
-
 #include "Creator.hpp"
 
 int random_int(const int& from, const int& to){
@@ -79,7 +77,7 @@ void Creator::create_new_random_db(const std::string& path_to_new_db) {
     throw std::runtime_error("BD::Open fail " + status.ToString());
 
 
-  for (int i = 0; i < random_int(2, 7); ++i){
+  for (int i = 0; i < 12/*random_int(2, 7)*/; ++i){
     column_families_names.push_back("column_family_" + std::to_string(i+1));
   }
 
