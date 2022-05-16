@@ -177,7 +177,7 @@ void Storage::start(const string& path_to_db,
     Storage::hashing(&storage, fields, hashs, out_fields);
     BOOST_LOG_TRIVIAL(info) << "End hashing and writing to db_out" << endl;
 
-    BOOST_LOG_TRIVIAL(info)<< "Look to your table:\n\n" <<
+    BOOST_LOG_TRIVIAL(info)<< "Result table:\n\n" <<
         Storage::print_table(out_fields, handles_cf_out, nums_in_columns).str();
 
     Storage::delete_db(db_out, handles_cf_out);
